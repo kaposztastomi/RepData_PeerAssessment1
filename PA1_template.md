@@ -2,6 +2,7 @@
 
 
 ## Loading and preprocessing the data
+
 This codechunk sets workingdirectory, loads data and convert date column to date datatype.
 
 
@@ -25,9 +26,10 @@ dfbase$date <- as.Date(dfbase$date)
 df<-dfbase
 ```
 
-
 ## What is mean total number of steps taken per day?
+
 Here I ignore missing samples, calculate the total steps per day, change column names and plot the histogram.
+
 
 ```r
 df <- na.omit(df)
@@ -75,6 +77,7 @@ plot(avgday$interval, avgday$steps, type="l", main="Steps in intervals on averag
 ```
 
 ![](./PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
 Interval of maximum number of step:
 
 ```r
@@ -90,7 +93,9 @@ avgday[which.max(avgday$steps),]
 
 
 ## Imputing missing values
+
 Here I calculate the number of total samples (with no NA-s), create new dataset and fill NA-s with the mean of steps.
+
 
 ```r
 nrow(dfbase[is.na(dfbase$steps),]) #Number of incomplete records
@@ -109,7 +114,9 @@ df2[is.na(df2$steps), 1]<-mean(df2$steps, na.rm=TRUE) #Eliminate NA-s with mean
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
 In this codechunk I aggregate number of steps using the new dataset, plot the histogram, and create time series of weekend and weekday.
+
 
 ```r
 stepsaggr2<-aggregate(df2$steps, by=list(df2$date), FUN=sum, na.rm=TRUE)
@@ -127,6 +134,7 @@ stepsmean2 <- mean(stepsaggr2$Steps)
 stepsmedian2 <- median(stepsaggr2$Steps)
 ```
 
+
 ```r
 stepsmean2 #Mean of steps
 ```
@@ -142,7 +150,9 @@ stepsmedian2 #Median of steps
 ```
 ## [1] 10766.19
 ```
+
 There is no huge impact of calculating with means instead of NA-s. It's worth to check the difference between the histograms.  
+
 
 
 ```r
@@ -161,8 +171,9 @@ df2$workday <- as.factor(df2$workday)
 nonasagg <- aggregate(steps ~ interval+workday, df2, mean)
 
 qplot(interval, steps, data=nonasagg, geom=c("line"), xlab="Intervals", 
-      ylab="Number of steps", main="") + facet_wrap(~ workday)
+      ylab="Number of steps", main="") + facet_wrap(~ workday)  
 ```
 
 ![](./PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
-As we see pepole have different routine especially between interval 500 and 1000. 
+
+As we see pepole have different routine on workdays and weekend, especially between interval 500 and 1000. 
